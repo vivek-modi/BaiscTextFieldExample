@@ -1,7 +1,6 @@
 package com.example.baisctextfieldexample
 
 import android.os.Bundle
-import android.text.InputType
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -21,11 +20,8 @@ import androidx.compose.ui.platform.PlatformTextInputMethodRequest
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.example.baisctextfieldexample.databinding.MainActivityBinding
 
 class MainActivity : ComponentActivity() {
-
-    private lateinit var binding: MainActivityBinding
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,9 +33,7 @@ class MainActivity : ComponentActivity() {
             InterceptPlatformTextInput(
                 interceptor = { request, nextHandler ->
                     val modifiedRequest = PlatformTextInputMethodRequest { outAttributes ->
-                        request.createInputConnection(outAttributes).also {
-                            outAttributes.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                        }
+                        request.createInputConnection(outAttributes)
                     }
                     nextHandler.startInputMethod(modifiedRequest)
                 }
@@ -69,6 +63,5 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
-
     }
 }
