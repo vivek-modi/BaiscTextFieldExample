@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicSecureTextField
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,9 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.example.baisctextfieldexample.ui.theme.BaiscTextFieldExampleTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -34,17 +33,25 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            BaiscTextFieldExampleTheme {
-                val stateOne = rememberTextFieldState()
-                val stateOTwo = rememberTextFieldState()
-                BasicTextFieldExamples(stateOne, stateOTwo)
-            }
+            val stateOne = rememberTextFieldState()
+            val stateTwo = rememberTextFieldState()
+            BasicTextFieldExamples(
+                stateOne,
+                remember { MutableInteractionSource() },
+                stateTwo,
+                remember { MutableInteractionSource() },
+            )
         }
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun BasicTextFieldExamples(stateOne: TextFieldState, stateOTwo: TextFieldState) {
+    fun BasicTextFieldExamples(
+        stateOne: TextFieldState,
+        firstInteractionSource: MutableInteractionSource,
+        stateOTwo: TextFieldState,
+        secondInteractionSource: MutableInteractionSource,
+    ) {
         Column(
             Modifier
                 .fillMaxSize()
@@ -59,45 +66,45 @@ class MainActivity : ComponentActivity() {
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next
                 ),
-                decorator = {
-                    TextFieldDefaults.DecorationBox(
-                        value = stateOne.text.toString(),
-                        innerTextField = it,
-                        enabled = true,
-                        singleLine = true,
-                        visualTransformation = VisualTransformation.None,
-                        label = {
-                            Text("Username")
-                        },
-                        placeholder = {
-                            Text("Username Placeholder")
-                        },
-                        interactionSource = remember { MutableInteractionSource() }
-                    )
-                }
+                interactionSource = firstInteractionSource,
+                decorator =
+                TextFieldDefaults.decorator(
+                    state = stateOne,
+                    enabled = true,
+                    label = {
+                        Text("Username")
+                    },
+                    placeholder = {
+                        Text("Username Placeholder")
+                    },
+                    lineLimits = TextFieldLineLimits.Default,
+                    interactionSource = firstInteractionSource,
+                    outputTransformation = null
+                )
             )
             BasicSecureTextField(
                 state = stateOTwo,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                decorator = {
-                    TextFieldDefaults.DecorationBox(
-                        value = stateOTwo.text.toString(),
-                        innerTextField = it,
-                        enabled = true,
-                        singleLine = true,
-                        visualTransformation = VisualTransformation.None,
-                        label = {
-                            Text("Password")
-                        },
-                        placeholder = {
-                            Text("Password Placeholder")
-                        },
-                        interactionSource = remember { MutableInteractionSource() }
-                    )
-                }
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done
+                ),
+                interactionSource = secondInteractionSource,
+                decorator = TextFieldDefaults.decorator(
+                    state = stateOTwo,
+                    enabled = true,
+                    label = {
+                        Text("Password")
+                    },
+                    placeholder = {
+                        Text("Password Placeholder")
+                    },
+                    lineLimits = TextFieldLineLimits.Default,
+                    interactionSource = secondInteractionSource,
+                    outputTransformation = null
+                )
             )
         }
     }
