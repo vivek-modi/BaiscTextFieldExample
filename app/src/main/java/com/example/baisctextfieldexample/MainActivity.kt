@@ -10,13 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicSecureTextField
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SecureTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -82,7 +82,7 @@ class MainActivity : ComponentActivity() {
                     outputTransformation = null
                 )
             )
-            BasicSecureTextField(
+            SecureTextField(
                 state = stateOTwo,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -92,19 +92,12 @@ class MainActivity : ComponentActivity() {
                     imeAction = ImeAction.Done
                 ),
                 interactionSource = secondInteractionSource,
-                decorator = TextFieldDefaults.decorator(
-                    state = stateOTwo,
-                    enabled = true,
-                    label = {
-                        Text("Password")
-                    },
-                    placeholder = {
-                        Text("Password Placeholder")
-                    },
-                    lineLimits = TextFieldLineLimits.Default,
-                    interactionSource = secondInteractionSource,
-                    outputTransformation = null
-                )
+                label = {
+                    Text("Password")
+                },
+                placeholder = {
+                    Text("Password Placeholder")
+                },
             )
         }
     }
